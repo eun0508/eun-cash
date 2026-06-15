@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>EUN가계부 3.1</title>
+<title>EUN 월 현금 대시보드 </title>
 <style>
 body{font-family:-apple-system,BlinkMacSystemFont,sans-serif;padding:12px;max-width:1100px;margin:auto}
 table{width:100%;border-collapse:collapse;margin-bottom:8px}
@@ -65,7 +65,7 @@ button{padding:8px 12px;margin:4px}
 <div class="box sum">카드 생활비: <span id="livingSum">0</span>원</div>
 <div class="box sum">투자/저축: <span id="investSum">0</span>원</div>
 <div class="box sum">현금지출: <span id="cashSpendSum">0</span>원</div>
-<div class="box sum">남은 돈: <span id="remainSum">0</span>원</div>
+<div class="box sum">여유자금: <span id="remainSum">0</span>원</div>
 
 <script>
 const cats=['보험','대출','렌탈','반려견','양가부모님','OTT','투자','저축','기타'];
@@ -241,12 +241,12 @@ function defaultCards(){
  addCard('현대카드',0);
  addCard('신한카드',0);
  addCard('KB국민카드',0);
- addCard('기타',0);
+ addCard('우리카드',0);
 }
 
 month.value=new Date().toISOString().slice(0,7);
 addIncome('은희 월급','');
-addIncome('배우자 월급','');
+addIncome('오빠 월급','');
 defaultCards();
 calc();
 </script>
