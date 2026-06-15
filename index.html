@@ -396,7 +396,8 @@ function restoreData(){
  r.onload=e=>{
    const data=JSON.parse(e.target.result);
    Object.keys(data).forEach(k=>localStorage.setItem(k,data[k]));
-   alert('복원 완료');
+  loadMonth();
+  alert('복원 완료');
  };
  r.readAsText(f);
 }
