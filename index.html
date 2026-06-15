@@ -63,6 +63,7 @@ button{padding:8px 12px;margin:4px}
    <button onclick="carryOver()">잔액이월</button>
    <button onclick="copyMonthlyFixed()">고정비 가져오기</button>
    <button onclick="saveMonth()">월 저장</button>
+   <button onclick="deleteMonth()">선택월 삭제</button>
  </div>
 </div>
 
@@ -322,6 +323,33 @@ function saveMonth(silent=false){
  if(!silent) alert('저장 완료');
 }
 
+function deleteMonth(){
+
+ let m = month.value;
+
+ if(!m){
+   alert('월을 선택하세요.');
+   return;
+ }
+
+ if(!confirm(m + ' 데이터를 삭제할까요?')){
+   return;
+ }
+
+ localStorage.removeItem('EUN31_' + m);
+
+ clearTable('incomeTable');
+ clearTable('investTable');
+ clearTable('cardTable');
+ clearTable('fixedTable');
+ clearTable('cashTable');
+
+ defaultCards();
+ calc();
+
+ alert(m + ' 데이터가 삭제되었습니다.');
+}
+ 
 function clearTable(id){
  let t=document.getElementById(id);
  while(t.rows.length>1)t.deleteRow(1);
