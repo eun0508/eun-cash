@@ -52,20 +52,18 @@ button{padding:8px 12px;margin:4px}
    <button onclick="backupData()">백업</button>
    <input type="file" id="restoreFile">
    <button onclick="restoreData()">복원</button>
-   <button onclick="loadMonth()">복원실행</button>
- </div>
 </div>
 
 <div class="panel">
  <b>💰 월 관리</b>
-
- <div class="btn-row">
-   <button onclick="carryOver()">잔액이월</button>
+<div class="btn-row">
+   <button onclick="loadMonth()">월 불러오기</button>
    <button onclick="copyMonthlyFixed()">고정비 가져오기</button>
+   <button onclick="carryOver()">잔액이월</button>
    <button onclick="saveMonth()">월 저장</button>
    <button onclick="deleteMonth()">선택월 삭제</button>
- </div>
 </div>
+
 
 <h2>수입</h2>
 <table id="incomeTable">
@@ -349,6 +347,8 @@ function deleteMonth(){
 
  alert(m + ' 데이터가 삭제되었습니다.');
 }
+
+ 
  
 function clearTable(id){
  let t=document.getElementById(id);
