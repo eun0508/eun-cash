@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>EUN가계부 2.3</title>
+<style>
+body{font-family:-apple-system,sans-serif;padding:12px;max-width:900px;margin:auto}
+h2{margin-top:24px}
+table{width:100%;border-collapse:collapse}
+th,td{border:1px solid #ddd;padding:6px}
+input,select{width:100%;box-sizing:border-box;padding:6px}
+button{padding:8px 12px;margin:4px}
+.box{border:1px solid #ddd;padding:10px;margin:6px 0}
+</style>
+</head>
+<body>
+<h1>💰 EUN가계부 2.3</h1>
+
+<div class="box">
+<label>대상 월</label>
+<input type="month" id="month">
+<button type="button" onclick="loadMonth()">월 불러오기</button>
+<button type="button" onclick="saveMonth()">월 저장</button>
+</div>
+
+<h2>수입</h2>
+<table id="incomeTable">
+<tr><th>항목</th><th>금액</th><th></th></tr>
+</table>
+<button type="button" onclick="addIncome()">+ 수입 추가</button>
+
+<h2>고정비</h2>
+<table id="fixedTable">
+<tr><th>매월</th><th>결제</th><th>항목</th><th>금액</th><th></th></tr>
+</table>
+<button type="button" onclick="addFixed()">+ 고정비 추가</button>
+
+<h2>투자/저축</h2>
+<table id="investTable">
+<tr><th>항목</th><th>금액</th><th></th></tr>
+</table>
+<button type="button" onclick="addInvest()">+ 투자 추가</button>
+
+<h2>카드 청구액</h2>
+<table id="cardTable">
+<tr><th>카드사</th><th>금액</th><th></th></tr>
+</table>
+<button type="button" onclick="addCard()">+ 카드 추가</button>
+
+<h2>요약</h2>
+<div class="box">총 수입: <span id="incomeSum">0</span>원</div>
+<div class="box">총 고정비: <span id="fixedSum">0</span>원</div>
+<div class="box">실제 생활비: <span id="livingSum">0</span>원</div>
+<div class="box">남은 돈: <span id="remainSum">0</span>원</div>
+
+<script>
+function num(v){ return Number(v||0); }
+
+function addIncome(name='',amt=''){
+ const t=document.getElementById('incomeTable');
+ const r=t.insertRow(-1);
+ r.innerHTML='<td><input value="'+name+'"></td><td><input type="number" value="'+amt+'" oninput="calc()"></td><td><button type="button" onclick="removeRow(this)">삭제</button></td>';
+ calc();
+}
+
+function addInvest(name='',amt=''){
+ const t=document.getElementById('investTable');
+ const r=t.insertRow(-1);
+ r.innerHTML='<td><input value="'+name+'"></td><td><input type="number" value="'+amt+'" oninput="calc()"></td><td><button type="button" onclick="removeRow(this)">삭제</button></td>';
+ calc();
+}
+
+function addCard(name='',amt=''){
+ const t=document.getElementById('cardTable');
+ const r=t.insertRow(-1);
+ r.innerHTML='<td><input value="'+name+'"></td><td><input type="number" value="'+amt+'" oninput="calc()"></td><td><button type="button" onclick="removeRow(this)">삭제</button></td>';
+ calc();
+}
+
+function addFixed(monthly=true,pay='현금',name='',amt=''){
+ const t=document.getElementById('fixedTable');
+ const r=t.insertRow(-1);
+ r.innerHTML='<td><input type="checkbox" '+(monthly?'checked':'')+'></td><td><select><option>현금</option><option '+(pay==='카드'?'selected':'')+'>카드</option></select></td><td><input value="'+name+'"></td><td><input type="number" value="'+amt+'" oninput="calc()"></td><td><button type="button" onclick="removeRow(this)">삭제</button></td>';
+ calc();
+}
+
+function removeRow(btn){
+ btn.closest('tr').remove();
+ calc();
+}
+
+function calc(){
+ let income=0, invest=0, fixed=0, cardFixed=0, cardTotal=0;
+
+ document.querySelectorAll('#incomeTable tr').forEach((r,i)=>{
+   if(i===0) return;
+   income += num(r.cells[1].querySelector('input').value);
+ });
+
+ document.querySelectorAll('#investTable tr').forEach((r,i)=>{
+   if(i===0) return;
+   invest += num(r.cells[1].querySelector('input').value);
+ });
+
+ document.querySelectorAll('#cardTable tr').forEach((r,i)=>{
+   if(i===0) return;
+   cardTotal += num(r.cells[1].querySelector('input').value);
+ });
+
+ document.querySelectorAll('#fixedTable tr').forEach((r,i)=>{
+   if(i===0) return;
+   const amt=num(r.cells[3].querySelector('input').value);
+   fixed += amt;
+   if(r.cells[1].querySelector('select').value==='카드') cardFixed += amt;
+ });
+
+ const living = cardTotal - cardFixed;
+ const remain = income - fixed - invest - living;
+
+ document.getElementById('incomeSum').textContent=income.toLocaleString();
+ document.getElementById('fixedSum').textContent=fixed.toLocaleString();
+ document.getElementById('livingSum').textContent=living.toLocaleString();
+ document.getElementById('remainSum').textContent=remain.toLocaleString();
+}
+
+function saveMonth(){
+ const m=document.getElementById('month').value;
+ if(!m){ alert('월 선택'); return; }
+
+ const data={income:[],invest:[],card:[],fixed:[]};
+
+ document.querySelectorAll('#incomeTable tr').forEach((r,i)=>{
+   if(i===0) return;
+   data.income.push([r.cells[0].querySelector('input').value,r.cells[1].querySelector('input').value]);
+ });
+
+ document.querySelectorAll('#investTable tr').forEach((r,i)=>{
+   if(i===0) return;
+   data.invest.push([r.cells[0].querySelector('input').value,r.cells[1].querySelector('input').value]);
+ });
+
+ document.querySelectorAll('#cardTable tr').forEach((r,i)=>{
+   if(i===0) return;
+   data.card.push([r.cells[0].querySelector('input').value,r.cells[1].querySelector('input').value]);
+ });
+
+ document.querySelectorAll('#fixedTable tr').forEach((r,i)=>{
+   if(i===0) return;
+   data.fixed.push({
+    monthly:r.cells[0].querySelector('input').checked,
+    pay:r.cells[1].querySelector('select').value,
+    name:r.cells[2].querySelector('input').value,
+    amt:r.cells[3].querySelector('input').value
+   });
+ });
+
+ localStorage.setItem('EUN23_'+m, JSON.stringify(data));
+ alert('저장 완료');
+}
+
+function loadMonth(){
+ const m=document.getElementById('month').value;
+ if(!m) return;
+
+ ['incomeTable','investTable','cardTable','fixedTable'].forEach(id=>{
+   const t=document.getElementById(id);
+   while(t.rows.length>1) t.deleteRow(1);
+ });
+
+ let raw=localStorage.getItem('EUN23_'+m);
+
+ if(!raw){
+   const keys=Object.keys(localStorage).filter(x=>x.startsWith('EUN23_')).sort();
+   if(keys.length){
+      const last=JSON.parse(localStorage.getItem(keys[keys.length-1]));
+      (last.fixed||[]).forEach(f=>{
+        if(f.monthly) addFixed(true,f.pay,f.name,f.amt);
+      });
+   }
+   calc();
+   return;
+ }
+
+ const d=JSON.parse(raw);
+ d.income.forEach(x=>addIncome(x[0],x[1]));
+ d.invest.forEach(x=>addInvest(x[0],x[1]));
+ d.card.forEach(x=>addCard(x[0],x[1]));
+ d.fixed.forEach(x=>addFixed(x.monthly,x.pay,x.name,x.amt));
+ calc();
+}
+
+document.getElementById('month').value=new Date().toISOString().slice(0,7);
+addIncome('은희 월급','3000000');
+addIncome('배우자 월급','4000000');
+addCard('삼성카드','0');
+calc();
+</script>
+</body>
+</html>
