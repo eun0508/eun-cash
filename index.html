@@ -55,8 +55,9 @@ button{padding:8px 12px;margin:4px}
 <h2>요약</h2>
 <div class="box sum">총 수입: <span id="incomeSum">0</span>원</div>
 <div class="box sum">현금 고정비: <span id="fixedSum">0</span>원</div>
-<div class="box sum">투자/저축: <span id="investSum">0</span>원</div>
+<div class="box sum">카드 고정비: <span id="cardFixedSum">0</span>원</div>
 <div class="box sum">카드 생활비: <span id="livingSum">0</span>원</div>
+<div class="box sum">투자/저축: <span id="investSum">0</span>원</div>
 <div class="box sum">남은 돈: <span id="remainSum">0</span>원</div>
 
 <script>
@@ -132,11 +133,12 @@ function calc(){
  let living=cardTotal-cardFixed;
  let remain=income-cashFixed-invest-living;
 
- incomeSum.textContent=fmt(income);
- fixedSum.textContent=fmt(cashFixed);
- investSum.textContent=fmt(invest);
- livingSum.textContent=fmt(living);
- remainSum.textContent=fmt(remain);
+incomeSum.textContent=fmt(income);
+fixedSum.textContent=fmt(cashFixed);
+cardFixedSum.textContent=fmt(cardFixed);
+livingSum.textContent=fmt(living);
+investSum.textContent=fmt(invest);
+remainSum.textContent=fmt(remain);
 }
 
 function collect(){
