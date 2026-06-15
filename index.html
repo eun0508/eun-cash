@@ -66,7 +66,8 @@ button{padding:8px 12px;margin:4px}
 <div class="box sum">투자/저축: <span id="investSum">0</span>원</div>
 <div class="box sum">현금지출: <span id="cashSpendSum">0</span>원</div>
 <div class="box sum">여유자금: <span id="remainSum">0</span>원</div>
-
+<button onclick="carryOver()">다음달 이월</button>
+ 
 <script>
 const cats=['보험','대출','렌탈','반려견','양가부모님','OTT','투자','저축','기타'];
 let saveTimer;
@@ -126,6 +127,59 @@ function removeRow(btn){
  autoSave();
 }
 
+function carryOver(){
+
+ let remain = num(document.getElementById('remainSum').textContent);
+
+ if(remain<=0){
+   alert('이월할 여유자금이 없습니다.');
+   return;
+ }
+
+ let current = month.value;
+
+ if(!current){
+   alert('월을 선택하세요.');
+   return;
+ }
+
+ let d = new Date(current + '-01');
+ d.setMonth(d.getMonth()+1);
+
+ let nextMonth =
+   d.getFullYear() + '-' +
+   String(d.getMonth()+1).padStart(2,'0');
+
+ let raw = localStorage.getItem('EUN31_'+nextMonth);
+
+ let data = raw ? JSON.parse(raw) : {
+   income:[],
+   invest:[],
+   card:[],
+   cash:[],
+   fixed:[]
+ };
+
+ let idx = data.income.findIndex(x=>x[0]==='전월 이월금');
+
+ if(idx>=0){
+   data.income[idx][1]=remain;
+ }else{
+   data.income.push(['전월 이월금',remain]);
+ }
+
+ localStorage.setItem(
+   'EUN31_'+nextMonth,
+   JSON.stringify(data)
+ );
+
+ alert(
+   fmt(remain)+'원이 '+
+   nextMonth+
+   ' 수입으로 이월되었습니다.'
+ );
+} 
+ 
 function calc(){
  let income=0,invest=0,cashFixed=0,cashSpend=0,cardTotal=0,cardFixed=0;
 
