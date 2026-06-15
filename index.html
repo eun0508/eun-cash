@@ -52,12 +52,19 @@ button{padding:8px 12px;margin:4px}
 </table>
 <button onclick="addCard()">+ 카드 추가</button>
 
+<h2>현금지출</h2>
+<table id="cashTable">
+<tr><th>항목</th><th>금액</th><th></th></tr>
+</table>
+<button onclick="addCash()">+ 현금지출 추가</button>
+
 <h2>요약</h2>
 <div class="box sum">총 수입: <span id="incomeSum">0</span>원</div>
 <div class="box sum">현금 고정비: <span id="fixedSum">0</span>원</div>
 <div class="box sum">카드 고정비: <span id="cardFixedSum">0</span>원</div>
 <div class="box sum">카드 생활비: <span id="livingSum">0</span>원</div>
 <div class="box sum">투자/저축: <span id="investSum">0</span>원</div>
+<div class="box sum">현금지출: <span id="cashSpendSum">0</span>원</div>
 <div class="box sum">남은 돈: <span id="remainSum">0</span>원</div>
 
 <script>
@@ -96,6 +103,11 @@ function addCard(a='',b=''){
  r.innerHTML='<td><input value="'+a+'" oninput="autoSave()"></td><td>'+moneyInput(b)+'</td><td><button onclick="removeRow(this)">삭제</button></td>';
 }
 
+function addCash(a='',b=''){
+ let r=cashTable.insertRow(-1);
+ r.innerHTML='<td><input value="'+a+'" oninput="autoSave()"></td><td>'+moneyInput(b)+'</td><td><button onclick="removeRow(this)">삭제</button></td>';
+}
+
 function addFixed(monthly=true,pay='현금',cat='보험',detail='',amt=''){
  let opts=cats.map(x=>`<option ${x===cat?'selected':''}>${x}</option>`).join('');
  let r=fixedTable.insertRow(-1);
@@ -115,10 +127,11 @@ function removeRow(btn){
 }
 
 function calc(){
- let income=0,invest=0,cashFixed=0,cardTotal=0,cardFixed=0;
+ let income=0,invest=0,cashFixed=0,cashSpend=0,cardTotal=0,cardFixed=0;
 
  [...incomeTable.rows].slice(1).forEach(r=>income+=num(r.cells[1].querySelector('input').value));
  [...investTable.rows].slice(1).forEach(r=>invest+=num(r.cells[1].querySelector('input').value));
+ [...cashTable.rows].slice(1).forEach(r=>cashSpend+=num(r.cells[1].querySelector('input').value));
  [...cardTable.rows].slice(1).forEach(r=>cardTotal+=num(r.cells[1].querySelector('input').value));
 
  [...fixedTable.rows].slice(1).forEach(r=>{
@@ -131,14 +144,15 @@ function calc(){
  });
 
  let living=cardTotal-cardFixed;
- let remain=income-cashFixed-invest-living;
+ let remain=income-cashFixed-invest-living-cashSpend;
 
-incomeSum.textContent=fmt(income);
-fixedSum.textContent=fmt(cashFixed);
-cardFixedSum.textContent=fmt(cardFixed);
-livingSum.textContent=fmt(living);
-investSum.textContent=fmt(invest);
-remainSum.textContent=fmt(remain);
+ incomeSum.textContent=fmt(income);
+ fixedSum.textContent=fmt(cashFixed);
+ cardFixedSum.textContent=fmt(cardFixed);
+ livingSum.textContent=fmt(living);
+ investSum.textContent=fmt(invest);
+ cashSpendSum.textContent=fmt(cashSpend);
+ remainSum.textContent=fmt(remain);
 }
 
 function collect(){
@@ -146,6 +160,7 @@ function collect(){
  income:[...[...incomeTable.rows].slice(1)].map(r=>[r.cells[0].querySelector('input').value,num(r.cells[1].querySelector('input').value)]),
  invest:[...[...investTable.rows].slice(1)].map(r=>[r.cells[0].querySelector('input').value,num(r.cells[1].querySelector('input').value)]),
  card:[...[...cardTable.rows].slice(1)].map(r=>[r.cells[0].querySelector('input').value,num(r.cells[1].querySelector('input').value)]),
+ cash:[...[...cashTable.rows].slice(1)].map(r=>[r.cells[0].querySelector('input').value,num(r.cells[1].querySelector('input').value)]),
  fixed:[...[...fixedTable.rows].slice(1)].map(r=>({
  monthly:r.cells[0].querySelector('input').checked,
  pay:r.cells[1].querySelector('select').value,
@@ -174,9 +189,9 @@ function loadMonth(){
  clearTable('investTable');
  clearTable('cardTable');
  clearTable('fixedTable');
+ clearTable('cashTable');
 
- let raw=localStorage.getItem('EUN31_'+m) ||
-         localStorage.getItem('EUN23_'+m);
+ let raw=localStorage.getItem('EUN31_'+m);
 
  if(!raw){
    let keys=Object.keys(localStorage).filter(x=>x.startsWith('EUN31_')).sort();
@@ -193,6 +208,7 @@ function loadMonth(){
  d.income.forEach(x=>addIncome(x[0],x[1]));
  d.invest.forEach(x=>addInvest(x[0],x[1]));
  d.card.forEach(x=>addCard(x[0],x[1]));
+ (d.cash||[]).forEach(x=>addCash(x[0],x[1]));
  d.fixed.forEach(x=>addFixed(x.monthly,x.pay,x.cat,x.detail,x.amt));
  calc();
 }
@@ -230,7 +246,7 @@ function defaultCards(){
 
 month.value=new Date().toISOString().slice(0,7);
 addIncome('은희 월급','');
-addIncome('오빠 월급','');
+addIncome('배우자 월급','');
 defaultCards();
 calc();
 </script>
