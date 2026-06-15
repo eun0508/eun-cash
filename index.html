@@ -46,14 +46,15 @@ button{padding:8px 12px;margin:4px}
 
 <hr>
 <div class="panel">
- <b>📂 데이터 관리</b>
+ <ㅕb>📂 데이터 관리</b>
 
  <div class="btn-row">
    <button onclick="backupData()">백업</button>
    <input type="file" id="restoreFile">
    <button onclick="restoreData()">복원</button>
+ </div>
 </div>
-
+  
 <div class="panel">
  <b>💰 월 관리</b>
 <div class="btn-row">
@@ -61,7 +62,8 @@ button{padding:8px 12px;margin:4px}
    <button onclick="carryOver()">잔액이월</button>
    <button onclick="saveMonth()">월 저장</button>
    <button onclick="deleteMonth()">선택월 삭제</button>
-</div>
+ </div>
+ </div>
 
 
 <h2>수입</h2>
@@ -412,10 +414,7 @@ function defaultCards(){
 }
 
 month.value=new Date().toISOString().slice(0,7);
-addIncome('은희 월급','');
-addIncome('오빠 월급','');
-defaultCards();
-calc();
+loadMonth();
 </script>
 </body>
 </html>
