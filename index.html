@@ -175,7 +175,8 @@ function loadMonth(){
  clearTable('cardTable');
  clearTable('fixedTable');
 
- let raw=localStorage.getItem('EUN31_'+m);
+ let raw=localStorage.getItem('EUN31_'+m) ||
+         localStorage.getItem('EUN23_'+m);
 
  if(!raw){
    let keys=Object.keys(localStorage).filter(x=>x.startsWith('EUN31_')).sort();
