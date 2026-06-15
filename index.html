@@ -18,15 +18,23 @@ button{padding:8px 12px;margin:4px}
 
 <h1>💰 EUN 월 현금 대시보드</h1>
 
-<div class="box">
 <label>대상 월</label>
 <input type="month" id="month">
-<button onclick="loadMonth()">월 불러오기</button>
-<button onclick="saveMonth()">월 저장</button>
+
+<hr>
+
+<b>📂 데이터 관리</b><br>
 <button onclick="backupData()">백업</button>
-<input type="file" id="restoreFile">
+<input type="file" id="restoreFile" style="width:auto">
 <button onclick="restoreData()">복원</button>
-</div>
+<button onclick="loadMonth()">복원실행</button>
+
+<br><br>
+
+<b>💰 월 관리</b><br>
+<button onclick="carryOver()">잔액이월</button>
+<button onclick="copyMonthlyFixed()">고정비 가져오기</button>
+<button onclick="saveMonth()">월 저장</button>
 
 <h2>수입</h2>
 <table id="incomeTable">
@@ -66,7 +74,6 @@ button{padding:8px 12px;margin:4px}
 <div class="box sum">투자/저축: <span id="investSum">0</span>원</div>
 <div class="box sum">현금지출: <span id="cashSpendSum">0</span>원</div>
 <div class="box sum">여유자금: <span id="remainSum">0</span>원</div>
-<button onclick="carryOver()">다음달 이월</button>
  
 <script>
 const cats=['보험','대출','렌탈','반려견','양가부모님','OTT','투자','저축','기타'];
@@ -132,7 +139,7 @@ function carryOver(){
  let remain = num(document.getElementById('remainSum').textContent);
 
  if(remain<=0){
-   alert('이월할 여유자금이 없습니다.');
+   alert('이월할 잔액이 없습니다.');
    return;
  }
 
@@ -179,6 +186,49 @@ function carryOver(){
    ' 수입으로 이월되었습니다.'
  );
 } 
+
+function copyMonthlyFixed(){
+
+ let keys = Object.keys(localStorage)
+   .filter(x=>x.startsWith('EUN31_'))
+   .sort();
+
+ if(keys.length===0){
+   alert('저장된 데이터가 없습니다.');
+   return;
+ }
+
+ let last = JSON.parse(
+   localStorage.getItem(keys[keys.length-1])
+ );
+
+ (last.fixed||[])
+   .filter(f=>f.monthly)
+   .forEach(f=>{
+
+     let exists = [...fixedTable.rows]
+       .slice(1)
+       .some(r =>
+         r.cells[3].querySelector('input').value === f.detail
+       );
+
+     if(!exists){
+       addFixed(
+         true,
+         f.pay,
+         f.cat,
+         f.detail,
+         f.amt
+       );
+     }
+
+   });
+
+ calc();
+ autoSave();
+
+ alert('매월 고정비를 가져왔습니다.');
+}
  
 function calc(){
  let income=0,invest=0,cashFixed=0,cashSpend=0,cardTotal=0,cardFixed=0;
@@ -247,16 +297,11 @@ function loadMonth(){
 
  let raw=localStorage.getItem('EUN31_'+m);
 
- if(!raw){
-   let keys=Object.keys(localStorage).filter(x=>x.startsWith('EUN31_')).sort();
-   if(keys.length){
-      let last=JSON.parse(localStorage.getItem(keys[keys.length-1]));
-      (last.fixed||[]).filter(f=>f.monthly).forEach(f=>addFixed(true,f.pay,f.cat,f.detail,f.amt));
-   }
+if(!raw){
    defaultCards();
    calc();
    return;
- }
+}
 
  let d=JSON.parse(raw);
  d.income.forEach(x=>addIncome(x[0],x[1]));
