@@ -42,7 +42,7 @@ button{padding:8px 12px;margin:4px}
 <h1>💰 EUN 월 현금 대시보드</h1>
 
 <label>대상 월</label>
-<input type="month" id="month">
+<input type="month" id="month" onchange="loadMonth()">
 
 <hr>
 <div class="panel">
@@ -57,7 +57,6 @@ button{padding:8px 12px;margin:4px}
 <div class="panel">
  <b>💰 월 관리</b>
 <div class="btn-row">
-   <button onclick="loadMonth()">월 불러오기</button>
    <button onclick="copyMonthlyFixed()">고정비 가져오기</button>
    <button onclick="carryOver()">잔액이월</button>
    <button onclick="saveMonth()">월 저장</button>
