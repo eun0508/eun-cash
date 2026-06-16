@@ -135,6 +135,17 @@ button:hover{
  color:#4B5563 !important;
  border:1px solid #D9DDE3;
 }
+
+.add-btn{
+  background:#EFEFEF !important;
+  color:#555 !important;
+  border:1px solid #D8DDE5 !important;
+  box-shadow:none !important;
+}
+
+.add-btn:hover{
+  background:#E5E7EB !important;
+}  
   
 </style>
 </head>
@@ -173,32 +184,32 @@ button:hover{
 <table id="incomeTable">
 <tr><th>항목</th><th>금액</th><th></th></tr>
 </table>
-<button onclick="addIncome()">+ 수입 추가</button>
-
+<button class="add-btn" onclick="addIncome()">+ 추가</button>
+  
 <h2>고정비</h2>
 <table id="fixedTable">
 <tr><th>매월</th><th>결제</th><th>카테고리</th><th>상세명</th><th>금액</th><th></th></tr>
 </table>
-<button onclick="addFixed()">+ 고정비 추가</button>
+<button class="add-btn" onclick="addFixed()">+ 추가</button>
 
 <h2>투자/저축</h2>
 <table id="investTable">
 <tr><th>항목</th><th>금액</th><th></th></tr>
 </table>
-<button onclick="addInvest()">+ 투자 추가</button>
+<button class="add-btn" onclick="addInvest()">+ 추가</button>
 
 <h2>카드 청구액</h2>
 <table id="cardTable">
 <tr><th>카드사</th><th>금액</th><th></th></tr>
 </table>
-<button onclick="addCard()">+ 카드 추가</button>
+<button class="add-btn" onclick="addCard()">+ 추가</button>
 
 <h2>현금지출</h2>
 <table id="cashTable">
 <tr><th>항목</th><th>금액</th><th></th></tr>
 </table>
-<button onclick="addCash()">+ 현금지출 추가</button>
-
+<button class="add-btn" onclick="addCash()">+ 추가</button>
+  
 <h2>요약</h2>
 <div class="summary-grid">
 <div class="box sum">총 수입: <span id="incomeSum">0</span>원</div>
