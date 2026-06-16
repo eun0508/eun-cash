@@ -120,10 +120,10 @@ button:hover{
 }
 
 #month{
-  width:100%;
+  width:calc(100% - 4px);
+  margin:0 auto;
   display:block;
   box-sizing:border-box;
-  margin:0;
 }
 
 .summary-grid{
@@ -189,16 +189,16 @@ button:hover{
   }
 
   /* 결제 */
-  #fixedTable th:nth-child(2),
-  #fixedTable td:nth-child(2){
-    width:50px;
-  }
+ #fixedTable th:nth-child(2),
+ #fixedTable td:nth-child(2){
+  width:40px;
+}
 
   /* 분류 */
-  #fixedTable th:nth-child(3),
-  #fixedTable td:nth-child(3){
-    width:70px;
-  }
+ #fixedTable th:nth-child(3),
+ #fixedTable td:nth-child(3){
+  width:55px;
+}
 
   /* 금액 */
   #fixedTable th:nth-child(5),
@@ -213,8 +213,8 @@ button:hover{
   }
 
   #fixedTable select{
-    font-size:13px;
-    padding:4px;
+    font-size:12px;
+    padding:2px;
   }
 
   #fixedTable input{
@@ -223,13 +223,7 @@ button:hover{
   }
 }
   
-.pay-select{
-  min-width:70px;
-}
 
-.cat-select{
-  min-width:90px;
-}
   
 </style>
 </head>
@@ -306,7 +300,7 @@ button:hover{
 </div>
  
 <script>
-const cats=['보험','대출','렌탈','반려','부모','OTT','투자','저축','기타'];
+const cats=['보','대','렌','반','모','OTT','투','저','etc'];
 let saveTimer;
 
 function num(v){return Number(String(v||'').replace(/,/g,''))||0;}
