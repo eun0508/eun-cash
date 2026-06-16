@@ -120,10 +120,13 @@ button:hover{
 }
 
 #month{
-  width:calc(100% - 4px);
-  margin:0 auto;
-  display:block;
+  width:100%;
+  max-width:100%;
   box-sizing:border-box;
+  padding:12px;
+  text-align:center;
+  appearance:none;
+  -webkit-appearance:none;
 }
 
 .summary-grid{
@@ -168,7 +171,7 @@ button:hover{
 @media (max-width:768px){
 
   .delete-btn{
-    min-width:52px !important;
+    min-width:44px !important;
     height:32px !important;
     font-size:12px;
     padding:4px 8px !important;
@@ -178,52 +181,22 @@ button:hover{
 
 @media (max-width:768px){
 
-  #fixedTable{
-    table-layout:fixed;
-  }
-
-  /* 월 */
   #fixedTable th:nth-child(1),
   #fixedTable td:nth-child(1){
-    width:38px;
+    width:40px;
   }
 
-  /* 결제 */
- #fixedTable th:nth-child(2),
- #fixedTable td:nth-child(2){
-  width:40px;
-}
-
-  /* 분류 */
- #fixedTable th:nth-child(3),
- #fixedTable td:nth-child(3){
-  width:55px;
-}
-
-  /* 금액 */
-  #fixedTable th:nth-child(5),
-  #fixedTable td:nth-child(5){
-    width:90px;
+  #fixedTable th:nth-child(2),
+  #fixedTable td:nth-child(2){
+    width:40px;
   }
 
-  /* 삭제 */
   #fixedTable th:nth-child(6),
   #fixedTable td:nth-child(6){
-    width:70px;
+    width:60px;
   }
 
-  #fixedTable select{
-    font-size:12px;
-    padding:2px;
-  }
-
-  #fixedTable input{
-    padding:6px;
-    font-size:13px;
-  }
 }
-  
-
   
 </style>
 </head>
@@ -300,7 +273,7 @@ button:hover{
 </div>
  
 <script>
-const cats=['보','대','렌','반','모','OTT','투','저','etc'];
+const cats=['보험','대출','렌탈','반려견','양가부모님','OTT','투자','저축','기타'];
 let saveTimer;
 
 function num(v){return Number(String(v||'').replace(/,/g,''))||0;}
