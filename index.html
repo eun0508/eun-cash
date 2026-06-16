@@ -120,10 +120,10 @@ button:hover{
 }
 
 #month{
-  width:98%;
-  margin:8px auto 10px auto;
+  width:100%;
   display:block;
   box-sizing:border-box;
+  margin:0;
 }
 
 .summary-grid{
@@ -176,6 +176,53 @@ button:hover{
 
 }
 
+@media (max-width:768px){
+
+  #fixedTable{
+    table-layout:fixed;
+  }
+
+  /* 월 */
+  #fixedTable th:nth-child(1),
+  #fixedTable td:nth-child(1){
+    width:38px;
+  }
+
+  /* 결제 */
+  #fixedTable th:nth-child(2),
+  #fixedTable td:nth-child(2){
+    width:50px;
+  }
+
+  /* 분류 */
+  #fixedTable th:nth-child(3),
+  #fixedTable td:nth-child(3){
+    width:70px;
+  }
+
+  /* 금액 */
+  #fixedTable th:nth-child(5),
+  #fixedTable td:nth-child(5){
+    width:90px;
+  }
+
+  /* 삭제 */
+  #fixedTable th:nth-child(6),
+  #fixedTable td:nth-child(6){
+    width:70px;
+  }
+
+  #fixedTable select{
+    font-size:13px;
+    padding:4px;
+  }
+
+  #fixedTable input{
+    padding:6px;
+    font-size:13px;
+  }
+}
+  
 .pay-select{
   min-width:70px;
 }
@@ -259,7 +306,7 @@ button:hover{
 </div>
  
 <script>
-const cats=['보험','대출','렌탈','반려견','양가부모님','OTT','투자','저축','기타'];
+const cats=['보험','대출','렌탈','반려','부모','OTT','투자','저축','기타'];
 let saveTimer;
 
 function num(v){return Number(String(v||'').replace(/,/g,''))||0;}
@@ -304,7 +351,7 @@ function addFixed(monthly=true,pay='현금',cat='보험',detail='',amt=''){
  let r=fixedTable.insertRow(-1);
  r.innerHTML=`
 <td><input type="checkbox" ${monthly?'checked':''} onchange="autoSave()"></td>
-<td><select class="pay-select" onchange="autoSave()"><option ${pay==='현'?'selected':''}>현</option><option ${pay==='카'?'selected':''}>카</option></select></td>
+<td><select class="pay-select" onchange="autoSave()"><option value="현금" ${pay==='현금'?'selected':''}>현</option><option value="카드" ${pay==='카드'?'selected':''}>카</option></select></td>
 <td><select class="cat-select" onchange="autoSave()">${opts}</select></td>
 <td><input value="${detail}" oninput="autoSave()"></td>
 <td>${moneyInput(amt)}</td>
