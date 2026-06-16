@@ -120,8 +120,10 @@ button:hover{
 }
 
 #month{
-  margin-top:8px;
-  margin-bottom:10px;
+  width:98%;
+  margin:8px auto 10px auto;
+  display:block;
+  box-sizing:border-box;
 }
 
 .summary-grid{
@@ -153,7 +155,8 @@ button:hover{
   td{
     padding:6px 4px;
   }
-
+}
+  
 .delete-btn{
   padding:6px 10px !important;
   min-width:60px !important;
@@ -172,6 +175,14 @@ button:hover{
   }
 
 }
+
+.pay-select{
+  min-width:70px;
+}
+
+.cat-select{
+  min-width:90px;
+}
   
 </style>
 </head>
@@ -184,7 +195,7 @@ button:hover{
   <input type="month" id="month" onchange="loadMonth()">
 </div>
 
-<hr>
+
 <div class="panel">
  <h3>📂 데이터 관리</h3>
 
@@ -293,8 +304,8 @@ function addFixed(monthly=true,pay='현금',cat='보험',detail='',amt=''){
  let r=fixedTable.insertRow(-1);
  r.innerHTML=`
 <td><input type="checkbox" ${monthly?'checked':''} onchange="autoSave()"></td>
-<td><select onchange="autoSave()"><option ${pay==='현금'?'selected':''}>현금</option><option ${pay==='카드'?'selected':''}>카드</option></select></td>
-<td><select onchange="autoSave()">${opts}</select></td>
+<td><select class="pay-select" onchange="autoSave()"><option ${pay==='현'?'selected':''}>현</option><option ${pay==='카'?'selected':''}>카</option></select></td>
+<td><select class="cat-select" onchange="autoSave()">${opts}</select></td>
 <td><input value="${detail}" oninput="autoSave()"></td>
 <td>${moneyInput(amt)}</td>
 <td><button class="delete-btn" onclick="removeRow(this)">삭제</button></td>`;
