@@ -123,12 +123,14 @@ button:hover{
   width:100%;
   max-width:100%;
   box-sizing:border-box;
-  padding:12px;
-  text-align:center;
   appearance:none;
   -webkit-appearance:none;
 }
 
+#month::-webkit-calendar-picker-indicator{
+  display:none;
+}  
+  
 .summary-grid{
  display:grid;
  grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
@@ -190,6 +192,10 @@ button:hover{
   #fixedTable td:nth-child(2){
     width:40px;
   }
+
+  #fixedTable th:nth-child(3),
+  #fixedTable td:nth-child(3){
+  width:55px;
 
   #fixedTable th:nth-child(6),
   #fixedTable td:nth-child(6){
