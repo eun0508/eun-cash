@@ -596,7 +596,11 @@ function defaultCards(){
  addCard('우리카드',0);
 }
 
-month.value=new Date().toISOString().slice(0,7);
+const today = new Date();
+const year = today.getFullYear();
+const monthNum = String(today.getMonth() + 1).padStart(2, '0');
+
+month.value = `${year}-${monthNum}`;
 loadMonth();
 </script>
 </body>
